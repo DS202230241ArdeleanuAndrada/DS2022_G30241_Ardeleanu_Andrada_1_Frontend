@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import AuthService from "./services/authService";
 import { AdminPage } from './features/admin/AdminPage';
-import { ViewUsers } from './features/user/ViewUsers';
 import { Layout, Menu } from 'antd';
 
 const { Header, Content } = Layout;
@@ -110,7 +109,7 @@ const App = () => {
           <Route exact path={"/"} element={<DashboardPage />} />
           <Route exact path={"/home"} element={<DashboardPage />} />
           <Route exact path="/login" element={<Login />} />
-          <Route path="/user" element={<ViewUsers />} />
+          {/* <Route path="/user" element={<ViewUsers />} /> */}
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>

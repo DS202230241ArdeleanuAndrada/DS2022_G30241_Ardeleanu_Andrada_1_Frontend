@@ -5,8 +5,7 @@ import AuthService from "../../services/authService";
 import { Tabs, Breadcrumb, Divider } from 'antd';
 import { Link } from "react-router-dom";
 import { UserOutlined, MobileOutlined, PartitionOutlined, UsergroupAddOutlined } from '@ant-design/icons';
-import { ViewUsers } from '../user/ViewUsers';
-import { AddUser } from '../user/AddUser';
+import { UserManagementPage } from '../user/UserManagementPage';
 import { DeviceManagementPage } from '../device/DeviceManagementPage';
 
 const { TabPane } = Tabs;
@@ -46,12 +45,9 @@ const AdminPage = () => {
 
       <Tabs>
         <TabPane tab={<span><UserOutlined />User Management</span>} key="1" >
-          <ViewUsers> 
+          <UserManagementPage> 
           
-          </ViewUsers>
-          <AddUser>
-
-          </AddUser>
+          </UserManagementPage>
         </TabPane>
         <TabPane tab={<span><MobileOutlined />Device Management</span>} key="2">
           <DeviceManagementPage> 
