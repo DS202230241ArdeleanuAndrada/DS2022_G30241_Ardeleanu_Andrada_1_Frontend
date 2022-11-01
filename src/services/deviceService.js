@@ -10,6 +10,20 @@ const getAllDevices = () => {
     });
 };
 
+const assignDevice = (userId, deviceId) => {
+  debugger
+  return axios
+    .post(API_URL + "/UserDevice/assignDevice", {
+      userId,
+      deviceId
+    })
+    .then((response) => {
+      debugger
+      console.log("resp:" + response)
+      return response.data;
+    });
+};
+
 const createDevice = (name, description, address, maxConsumption) => {
   return axios
     .post(API_URL + "/UserDevice/create", {
@@ -53,9 +67,10 @@ const deleteDevice = (id) => {
 
 const DeviceService = {
   getAllDevices,
+  assignDevice,
   createDevice,
   updateDevice,
-  deleteDevice,
+  deleteDevice,  
 }
 
 export default DeviceService;

@@ -10,12 +10,14 @@ const DeviceManagementPage = () => {
   const [open, setOpen] = useState(false);
   const [deviceData, setDeviceData] = useState([]);
   const [id, setId] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [address, setAddress] = useState();
   const [maxConsumption, setMaxConsumption] = useState();
   const [isCreate, setIsCreate] = useState(false);
   const [usersList, setUsersList] = useState([]);
+  const [size, setSize] = useState('small');
   const { Option } = Select;
 
   useEffect(() => {
@@ -52,22 +54,13 @@ const DeviceManagementPage = () => {
     setMaxConsumption(null);
   }
 
-  const handleUpdate = () => {
-    console.log(id, name, description, address, maxConsumption)
-    DeviceService.updateDevice(id, name, description, address, maxConsumption)
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-        setOpen(false);
-        getDevicesData();
-      })
-  };
-
   const handleCreate = () => {
     DeviceService.createDevice(name, description, address, maxConsumption)
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+        DeviceService.assignDevice(userId, res)
+          .then(res => {
+            getDevicesData();
+          })
       })
     setLoading(true);
     setTimeout(() => {
@@ -75,6 +68,18 @@ const DeviceManagementPage = () => {
       setOpen(false);
       getDevicesData();
     }, 3000);
+  };
+
+  const handleUpdate = () => {
+    console.log(id, name, description, address, maxConsumption)
+    DeviceService.updateDevice(id, name, description, address, maxConsumption)
+      .then(res => {
+        DeviceService.assignDevice(userId, res)
+          .then(() => {
+            getDevicesData();
+          })
+        setOpen(false);
+      })
   };
 
   const handleDelete = (id) => {
@@ -90,6 +95,7 @@ const DeviceManagementPage = () => {
 
   const handleSelectChange = (value) => {
     console.log(`selected ${value}`);
+    setUserId(value);
   }
 
   const handleNameChange = (e) => {
@@ -142,23 +148,23 @@ const DeviceManagementPage = () => {
         console.log("record: ", record)
         return (
           <>
-            <button onClick={() => {
-              setIsCreate(false);
-              setOpen(true);
-              setId(record.Id);
-              setName(record.Name);
-              setDescription(record.Description);
-              setAddress(record.Address);
-              setMaxConsumption(record.MaxConsumption);
-            }}>
-              <EditTwoTone />
-            </button>
-            <button
+            <Button type="secondary" shape="round" icon={<EditTwoTone />} size={size}
+              onClick={() => {
+                setIsCreate(false);
+                setOpen(true);
+                setId(record.Id);
+                setName(record.Name);
+                setDescription(record.Description);
+                setAddress(record.Address);
+                setMaxConsumption(record.MaxConsumption);
+              }}>
+
+            </Button>
+            <Button type="secondary" shape="round" icon={<DeleteTwoTone />} size={size}
               onClick={() => {
                 handleDelete(record.Id);
               }}>
-              <DeleteTwoTone />
-            </button>
+            </Button>
           </>
         )
       }
