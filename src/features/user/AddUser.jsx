@@ -51,7 +51,7 @@ const AddUser = () => {
                 open={open}
                 title="Please fill in all the fields in order to add a new user"
                 onOk={handleOk}
-                onCancel={handleCancel}
+                onCancel={handleCancel} destroyOnClose={true}
                 footer={[
                     <Button key="back" shape="round" onClick={handleCancel}>
                         Return
@@ -70,23 +70,14 @@ const AddUser = () => {
                     }}
                     layout="horizontal"
                 >
-                    <Form.Item label="Name"
-                        value={name}
-                        onChange={handleNameChange}
-                    >
-                        <Input />
+                    <Form.Item label="Name" value={name} onChange={handleNameChange}>
+                        <Input/>
                     </Form.Item>
-                    <Form.Item label="Username"
-                        value={name}
-                        onChange={handleUsernameChange}
-                    >
-                        <Input />
+                    <Form.Item label="Username" value={name} onChange={handleUsernameChange}>
+                        <Input/>
                     </Form.Item>
-                    <Form.Item label="Password"
-                        value={name}
-                        onChange={handlePasswordChange}
-                    >
-                        <Input />
+                    <Form.Item label="Password" value={name} onChange={handlePasswordChange}>
+                        <Input/>
                     </Form.Item>
                 </Form>
             </Modal>

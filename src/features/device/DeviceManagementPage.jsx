@@ -1,7 +1,8 @@
-import { Form, Input, Button, Modal, Table } from 'antd';
+import { Form, Input, Button, Modal, Table, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
 import DeviceService from '../../services/deviceService';
 import { EditTwoTone, DeleteTwoTone } from '@ant-design/icons';
+import UserService from '../../services/userService';
 
 const DeviceManagementPage = () => {
 
@@ -13,9 +14,13 @@ const DeviceManagementPage = () => {
   const [description, setDescription] = useState();
   const [address, setAddress] = useState();
   const [maxConsumption, setMaxConsumption] = useState();
+  const [isCreate, setIsCreate] = useState(false);
+  const [usersList, setUsersList] = useState([]);
+  const { Option } = Select;
 
   useEffect(() => {
     getDevicesData();
+    getUsersData();
   }, []);
 
   const getDevicesData = async () => {
@@ -25,11 +30,30 @@ const DeviceManagementPage = () => {
     setLoading(false);
   }
 
-  const showModal = () => {
+  const getUsersData = async () => {
+    setLoading(true);
+    const res = await UserService.getAllUsers();
+    setUsersList(res.map(row => ({ Id: row.id, Name: row.name })));
+    console.log("im here: ", res)
+    setLoading(false);
+  }
+
+  const showModal = async () => {
     setOpen(true);
+    console.log("opened")
+    await getUsersData()
   };
 
+  const resetStateValues = () => {
+    setId(null);
+    setName(null);
+    setDescription(null);
+    setAddress(null);
+    setMaxConsumption(null);
+  }
+
   const handleUpdate = () => {
+    console.log(id, name, description, address, maxConsumption)
     DeviceService.updateDevice(id, name, description, address, maxConsumption)
       .then(res => {
         console.log(res);
@@ -40,7 +64,6 @@ const DeviceManagementPage = () => {
   };
 
   const handleCreate = () => {
-    debugger
     DeviceService.createDevice(name, description, address, maxConsumption)
       .then(res => {
         console.log(res);
@@ -64,6 +87,10 @@ const DeviceManagementPage = () => {
   const handleCancel = () => {
     setOpen(false);
   };
+
+  const handleSelectChange = (value) => {
+    console.log(`selected ${value}`);
+  }
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -111,27 +138,30 @@ const DeviceManagementPage = () => {
       title: 'Action',
       dataIndex: 'Action',
       key: 'action',
-      render: (record) => (
-        <>
-          <button onClick={() => {
-            setOpen(true);
-            setId(record.id);
-            setName(record.Name);
-            setDescription(record.Description);
-            setAddress(record.Address);
-            setMaxConsumption(record.maxConsumption);
-            handleUpdate(record.id)
-          }}>
-            <EditTwoTone />
-          </button>
-          <button
-            onClick={() => {
-              handleDelete(record.Id);
+      render: (_, record) => {
+        console.log("record: ", record)
+        return (
+          <>
+            <button onClick={() => {
+              setIsCreate(false);
+              setOpen(true);
+              setId(record.Id);
+              setName(record.Name);
+              setDescription(record.Description);
+              setAddress(record.Address);
+              setMaxConsumption(record.MaxConsumption);
             }}>
-            <DeleteTwoTone />
-          </button>
-        </>
-      ),
+              <EditTwoTone />
+            </button>
+            <button
+              onClick={() => {
+                handleDelete(record.Id);
+              }}>
+              <DeleteTwoTone />
+            </button>
+          </>
+        )
+      }
     },
   ];
 
@@ -143,19 +173,29 @@ const DeviceManagementPage = () => {
         dataSource={deviceData}
         loading={loading}
       />
-      <Button type="primary" shape="round" onClick={showModal}>
+      <Button type="primary" shape="round" onClick={async () => {
+        setIsCreate(true);
+        await showModal();
+        resetStateValues();
+      }}>
         Add new device
       </Button>
       <Modal
         open={open}
         title="Please fill in all the fields in order to add a new device"
-        onOk={handleCreate}
         onCancel={handleCancel}
+        destroyOnClose={true}
         footer={[
           <Button key="back" shape="round" onClick={handleCancel}>
             Return
           </Button>,
-          <Button key="submit" shape="round" type="primary" loading={loading} onClick={handleCreate}>
+          <Button key="submit" shape="round" type="primary" loading={loading} onClick={() => {
+            if (isCreate) {
+              handleCreate();
+            } else {
+              handleUpdate();
+            }
+          }}>
             Submit
           </Button>
         ]}
@@ -173,13 +213,26 @@ const DeviceManagementPage = () => {
             <Input onChange={handleNameChange} value={name} />
           </Form.Item>
           <Form.Item label="Description">
-            <Input onChange={handleDescriptionChange} value={description}/>
+            <Input onChange={handleDescriptionChange} value={description} />
           </Form.Item>
           <Form.Item label="Address">
             <Input onChange={handleAddressChange} value={address} />
           </Form.Item>
           <Form.Item label="MAX Consumption">
             <Input onChange={handleMaxConsumptionChange} value={maxConsumption} />
+          </Form.Item>
+          <Form.Item label="Select assigned user">
+            <Select
+              style={{
+                width: 120,
+              }}
+              onChange={handleSelectChange}
+              loading={loading}
+            >
+              {usersList.map((user) => {
+                return <Option value={user.Id}>{user.Name}</Option>
+              })}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

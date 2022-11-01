@@ -24,14 +24,15 @@ const createDevice = (name, description, address, maxConsumption) => {
     });
 };
 
-const updateDevice = (id, name, username, password) => {
+const updateDevice = (id, name, description, address, maxConsumption) => {
 
   return axios
-    .post(API_URL + "/UserDevice/update", {
+    .post(API_URL + "/UserDevice/updateDevice", {
       id,
       name,
-      username,
-      password
+      description,
+      address,
+      maxConsumption
     })
     .then((response) => {
       console.log("resp:" + response)
@@ -41,7 +42,7 @@ const updateDevice = (id, name, username, password) => {
 
 const deleteDevice = (id) => {
   return axios
-    .post(API_URL + "/UserDevice/delete", {
+    .post(API_URL + "/UserDevice/deleteDevice", {
       id
     })
     .then((response) => {
