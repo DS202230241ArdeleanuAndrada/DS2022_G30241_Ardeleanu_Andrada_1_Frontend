@@ -1,14 +1,7 @@
 import axios from "axios";
+import { useState } from "react";
 
 const API_URL = "https://localhost:44347";
-
-const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
-    username,
-    email,
-    password,
-  });
-};
 
 const login = (username, password) => {
 
@@ -20,7 +13,7 @@ const login = (username, password) => {
     .then((response) => {
       console.log("resp:" + response)
       if (response.data.username) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));        
       }
 
       return response.data;
@@ -29,7 +22,6 @@ const login = (username, password) => {
 
 const logout = () => {
   localStorage.removeItem("user");
-
   return true;
 };
 
@@ -38,7 +30,6 @@ const getCurrentUser = () => {
 };
 
 const AuthService = {
-  register,
   login,
   logout,
   getCurrentUser,

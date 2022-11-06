@@ -15,7 +15,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-
+    debugger
     if (user) {
       setIsAdmin(user.role === "admin");
     }
@@ -23,42 +23,45 @@ const AdminPage = () => {
 
   return (
     isAdmin ?
-      <h1>Admin page</h1> :
+      <>
+        <h1>Admin page</h1>
 
-      <h1>Not allowed to view this page</h1>,
+        <div style={{
+          display: 'block', width: 700, padding: 40
+        }}>
 
-    <div style={{
-      display: 'block', width: 700, padding: 40
-    }}>
-      <Breadcrumb>
-        <Breadcrumb.Item href="">
-          <Link to={"/home"} className="nav-link">
-            Home
-          </Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="">
-          <span>Admin</span>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+          <Breadcrumb>
+            <Breadcrumb.Item href="">
+              <Link to={"/home"} className="nav-link">
+                Home
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="">
+              <span>Admin</span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
 
-      <Divider />
+          <Divider />
 
-      <Tabs>
-        <TabPane tab={<span><UserOutlined />User Management</span>} key="1" >
-          <UserManagementPage> 
-          
-          </UserManagementPage>
-        </TabPane>
-        <TabPane tab={<span><MobileOutlined />Device Management</span>} key="2">
-          <DeviceManagementPage> 
-            
-          </DeviceManagementPage>
-        </TabPane>
-        <TabPane tab={<span><PartitionOutlined />Mappings</span>} key="3">
+          <Tabs>
+            <TabPane tab={<span><UserOutlined />User Management</span>} key="1" >
+              <UserManagementPage>
 
-        </TabPane>
-      </Tabs>
-    </div>
+              </UserManagementPage>
+            </TabPane>
+            <TabPane tab={<span><MobileOutlined />Device Management</span>} key="2">
+              <DeviceManagementPage>
+
+              </DeviceManagementPage>
+            </TabPane>
+            <TabPane tab={<span><PartitionOutlined />Mappings</span>} key="3">
+
+            </TabPane>
+          </Tabs>
+        </div>
+      </> :
+
+      <h1>Not allowed to view this page</h1>
   )
 };
 

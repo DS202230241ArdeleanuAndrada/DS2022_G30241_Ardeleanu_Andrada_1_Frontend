@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import DeviceService from '../../services/deviceService';
 import { EditTwoTone, DeleteTwoTone, EyeOutlined } from '@ant-design/icons';
 import UserService from '../../services/userService';
+import '../../App.css';
 
 const UserManagementPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [isDeviceList, setIsDeviceList] = useState(false);
     const [usersData, setUsersData] = useState([]);
     const [id, setId] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
@@ -17,20 +17,15 @@ const UserManagementPage = () => {
     const [password, setPassword] = useState();
     const [isCreate, setIsCreate] = useState(false);
     const [devicesList, setDevicesList] = useState([]);
-    const [size, setSize] = useState('small');
+    const size = 'small';
     const { Option } = Select;
+    const [openDevice, setOpenDevices] = useState(false);
+    const [deviceData, setDeviceData] = useState([]);
 
     useEffect(() => {
-        getDevicesData();
+        getDevicesToAssign();
         getUsersData();
     }, []);
-
-    const getDevicesData = async () => {
-        setLoading(true);
-        const res = await DeviceService.getAllDevices();
-        setDevicesList(res.map(row => ({ Id: row.id, Name: row.name })));
-        setLoading(false);
-    }
 
     const getUsersData = async () => {
         setLoading(true);
@@ -39,14 +34,25 @@ const UserManagementPage = () => {
         setLoading(false);
     }
 
+    const getDevicesData = async (id) => {
+        setLoading(true);
+        const res = await UserService.getUserDevices(id);
+        const data = res.devices.map(row => ({ Id: row.id, Name: row.name, Address: row.address, Description: row.description, MaxConsumption: row.maxConsumption }));     
+        debugger
+        setDeviceData(data);
+        setLoading(false);
+    }
+
+    const getDevicesToAssign = async () => {
+        setLoading(true);
+        const res = await DeviceService.getAllDevices();
+        setDevicesList(res.map(row => ({ Id: row.id, Name: row.name })));
+        setLoading(false);
+    }
+
     const showModal = async () => {
         setOpen(true);
         await getUsersData()
-    };
-
-    const showModalForDevices = async () => {
-        setOpen(true);
-        await getDevicesData()
     };
 
     const resetStateValues = () => {
@@ -129,6 +135,34 @@ const UserManagementPage = () => {
         }),
     };
 
+    const userColumns = [
+        {
+            title: 'Id',
+            dataIndex: 'Id',
+            key: 'id',
+        },
+        {
+            title: 'Name',
+            dataIndex: 'Name',
+            key: 'name',
+        },
+        {
+            title: 'Address',
+            dataIndex: 'Address',
+            key: 'address',
+        },
+        {
+            title: 'Description',
+            dataIndex: 'Description',
+            key: 'description',
+        },
+        {
+            title: 'MaxConsumption',
+            dataIndex: 'MaxConsumption',
+            key: 'maxConsumption',
+        }
+    ]
+
     const columns = [
         {
             title: 'Id',
@@ -160,11 +194,9 @@ const UserManagementPage = () => {
                     <>
                         <Tooltip title="View user's devices">
                             <Button type="secondary" shape="round" icon={<EyeOutlined />} size={size}
-                                onClick={async () => {
-                                    if (isDeviceList) {
-                                        setIsCreate(false);                                        
-                                        await showModalForDevices(true);
-                                    }
+                                onClick={ async () => {
+                                    await getDevicesData(record.Id);
+                                    setOpenDevices(true);                                
                                 }}>
                             </Button>
                         </Tooltip>
@@ -172,7 +204,6 @@ const UserManagementPage = () => {
                             <Button type="secondary" shape="round" icon={<EditTwoTone />} size={size}
                                 onClick={() => {
                                     setIsCreate(false);
-                                    setIsDeviceList(false);
                                     setOpen(true);
                                     setId(record.Id);
                                     setName(record.Name);
@@ -210,21 +241,8 @@ const UserManagementPage = () => {
                 Add new user
             </Button>
             <Modal
-                open={setOpen}
-                title="These are the assigned devices for the selected user"
-                onCancel={handleCancel}
-                destroyOnClose={true}
-            >
-                <Table
-                    columns={deviceColumn}
-                    dataSource={devicesList}
-                    loading={loading}
-                />
-
-            </Modal>
-            <Modal
                 open={open}
-                title="Please fill in all the fields in order to add a new user"
+                title="Please complete all the fields"
                 onCancel={handleCancel}
                 destroyOnClose={true}
                 footer={[
@@ -274,6 +292,19 @@ const UserManagementPage = () => {
                         </Select>
                     </Form.Item>
                 </Form>
+            </Modal>
+            <Modal
+                open={openDevice}
+                title="User's devices"
+                onCancel={() => setOpenDevices(false)}
+                destroyOnClose={true}
+                className="modal"
+            >     
+                <Table
+                columns={userColumns}
+                dataSource={deviceData}
+                loading={loading}
+            />
             </Modal>
         </>
     );

@@ -50,11 +50,27 @@ const deleteUser = (id) => {
     });
 };
 
+const getUserDevices = (UserId) => {
+  console.log(UserId);  
+  return axios
+    .get(API_URL + "/UserDevice/getDevices", {
+      params : {
+        UserId : UserId
+      }
+    })
+    .then((response) => {
+      console.log("resp:" + response)
+      debugger
+      return response.data;
+    });
+};
+
 const UserService = {
   getAllUsers,
   createUser,
   updateUser,
   deleteUser,
+  getUserDevices
 }
 
 export default UserService;

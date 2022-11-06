@@ -6,6 +6,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import AuthService from "./services/authService";
 import { AdminPage } from './features/admin/AdminPage';
 import { Layout, Menu } from 'antd';
+import { BasicUserPage } from './features/user/BasicUserPage';
 
 const { Header, Content } = Layout;
 
@@ -109,7 +110,7 @@ const App = () => {
           <Route exact path={"/"} element={<DashboardPage />} />
           <Route exact path={"/home"} element={<DashboardPage />} />
           <Route exact path="/login" element={<Login />} />
-          {/* <Route path="/user" element={<ViewUsers />} /> */}
+          <Route path="/user" element={<BasicUserPage  />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>
