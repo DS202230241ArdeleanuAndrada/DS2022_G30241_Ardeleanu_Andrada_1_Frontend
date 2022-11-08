@@ -1,23 +1,24 @@
-import { Form, Input, Button, Modal, Table, Select } from 'antd';
+import { Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import AuthService from "../../services/authService";
+import DeviceService from '../../services/deviceService';
 import UserService from '../../services/userService';
 
 const BasicUserPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [deviceData, setDeviceData] = useState([]);
+    const user = AuthService.getCurrentUser();
 
     useEffect(() => {
-        getDevicesData();        
-    }, []); 
+        getDevicesData();
+    }, []);
 
     const getDevicesData = async () => {
         setLoading(true);
-        const user = AuthService.getCurrentUser();
         const res = await UserService.getUserDevices(user.id);
         const data = res.devices.map(row => ({ Id: row.id, Name: row.name, Address: row.address, Description: row.description, MaxConsumption: row.maxConsumption }));
-        debugger        
+        debugger
         setDeviceData(data);
         setLoading(false);
     }
@@ -47,12 +48,12 @@ const BasicUserPage = () => {
             title: 'MaxConsumption',
             dataIndex: 'MaxConsumption',
             key: 'maxConsumption',
-        }
+        },
     ]
 
     return (
         <>
-            <Table
+            <Table  
                 columns={columns}
                 pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20'] }}
                 dataSource={deviceData}

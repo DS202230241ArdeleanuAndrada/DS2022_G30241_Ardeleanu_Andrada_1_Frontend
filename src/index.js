@@ -11,12 +11,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 );
-
-// const root = ReactDOM.createRoot(document.getElementById('root'))
-// root.render(
-//   <React.StrictMode>
-//     {/* <AuthProvider> */}
-//       <App></App>
-//     {/* </AuthProvider> */}
-//   </React.StrictMode>
-// );

@@ -18,7 +18,19 @@ const assignDevice = (userId, deviceId) => {
       deviceId
     })
     .then((response) => {
-      debugger
+      console.log("resp:" + response)
+      return response.data;
+    });
+};
+
+const unassignDevice = (userId, deviceId) => {
+  debugger
+  return axios
+    .post(API_URL + "/UserDevice/unassignDevice", {
+      userId,
+      deviceId
+    })
+    .then((response) => {
       console.log("resp:" + response)
       return response.data;
     });
@@ -68,6 +80,7 @@ const deleteDevice = (id) => {
 const DeviceService = {
   getAllDevices,
   assignDevice,
+  unassignDevice,
   createDevice,
   updateDevice,
   deleteDevice,  

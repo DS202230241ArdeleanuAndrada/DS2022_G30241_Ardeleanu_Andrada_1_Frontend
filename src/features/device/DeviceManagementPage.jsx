@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DeviceService from '../../services/deviceService';
 import { EditTwoTone, DeleteTwoTone } from '@ant-design/icons';
 import UserService from '../../services/userService';
+import '../../App.css';
 
 const DeviceManagementPage = () => {
 
@@ -178,6 +179,7 @@ const DeviceManagementPage = () => {
         pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20'] }}
         dataSource={deviceData}
         loading={loading}
+        className="modal"
       />
       <Button type="primary" shape="round" onClick={async () => {
         setIsCreate(true);

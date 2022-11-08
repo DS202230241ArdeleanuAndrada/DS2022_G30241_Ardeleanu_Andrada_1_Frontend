@@ -54,9 +54,6 @@ const AdminPage = () => {
 
               </DeviceManagementPage>
             </TabPane>
-            <TabPane tab={<span><PartitionOutlined />Mappings</span>} key="3">
-
-            </TabPane>
           </Tabs>
         </div>
       </> :

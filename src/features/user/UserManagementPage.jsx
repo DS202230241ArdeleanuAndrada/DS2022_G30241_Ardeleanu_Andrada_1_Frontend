@@ -38,7 +38,6 @@ const UserManagementPage = () => {
         setLoading(true);
         const res = await UserService.getUserDevices(id);
         const data = res.devices.map(row => ({ Id: row.id, Name: row.name, Address: row.address, Description: row.description, MaxConsumption: row.maxConsumption }));     
-        debugger
         setDeviceData(data);
         setLoading(false);
     }
@@ -94,6 +93,13 @@ const UserManagementPage = () => {
         UserService.deleteUser(id)
             .then(res => {
                 getUsersData();
+            })
+    };
+
+    const handleUnassign = (deviceId) => {
+        DeviceService.unassignDevice(id, deviceId)
+            .then(() => {
+                getDevicesData(id);
             })
     };
 
@@ -160,7 +166,26 @@ const UserManagementPage = () => {
             title: 'MaxConsumption',
             dataIndex: 'MaxConsumption',
             key: 'maxConsumption',
-        }
+        },
+        {
+            title: 'Action',
+            dataIndex: 'Action',
+            key: 'action',
+            render: (_, record) => {
+                console.log("record: ", record)
+                return (
+                    <>
+                        <Tooltip title="Delete device">
+                            <Button type="secondary" shape="round" icon={<DeleteTwoTone />} size={size}
+                                onClick={() => {
+                                    handleUnassign(record.Id);
+                                }}>
+                            </Button>
+                        </Tooltip>
+                    </>
+                )
+            }
+        },
     ]
 
     const columns = [
@@ -232,6 +257,7 @@ const UserManagementPage = () => {
                 pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20'] }}
                 dataSource={usersData}
                 loading={loading}
+                className="modal"
             />
             <Button type="primary" shape="round" onClick={async () => {
                 setIsCreate(true);
@@ -297,6 +323,7 @@ const UserManagementPage = () => {
                 open={openDevice}
                 title="User's devices"
                 onCancel={() => setOpenDevices(false)}
+                onOk={() => setOpenDevices(false)}
                 destroyOnClose={true}
                 className="modal"
             >     
