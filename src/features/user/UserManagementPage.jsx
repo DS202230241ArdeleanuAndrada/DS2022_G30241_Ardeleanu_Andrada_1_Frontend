@@ -64,7 +64,7 @@ const UserManagementPage = () => {
     const handleCreate = () => {
         UserService.createUser(name, username, password)
             .then(res => {
-                UserService.assignDevice(res, deviceId)
+                DeviceService.assignDevice(res, deviceId)
                     .then(res => {
                         getUsersData();
                     })
