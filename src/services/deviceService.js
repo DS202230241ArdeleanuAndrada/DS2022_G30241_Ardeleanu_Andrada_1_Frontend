@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "https://localhost:44347";
+const API_URL = "http://localhost:49155";
 
 const getAllDevices = () => {
   return axios

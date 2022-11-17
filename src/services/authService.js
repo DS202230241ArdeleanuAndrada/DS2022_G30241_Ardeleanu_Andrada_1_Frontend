@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-const API_URL = "https://localhost:44347";
+const API_URL = "http://localhost:49155";
 
 const login = (username, password) => {
 
