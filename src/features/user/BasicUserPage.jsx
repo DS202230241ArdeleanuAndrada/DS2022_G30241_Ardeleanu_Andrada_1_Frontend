@@ -1,7 +1,6 @@
 import { Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import AuthService from "../../services/authService";
-import DeviceService from '../../services/deviceService';
 import UserService from '../../services/userService';
 
 const BasicUserPage = () => {
@@ -18,7 +17,6 @@ const BasicUserPage = () => {
         setLoading(true);
         const res = await UserService.getUserDevices(user.id);
         const data = res.devices.map(row => ({ Id: row.id, Name: row.name, Address: row.address, Description: row.description, MaxConsumption: row.maxConsumption }));
-        debugger
         setDeviceData(data);
         setLoading(false);
     }

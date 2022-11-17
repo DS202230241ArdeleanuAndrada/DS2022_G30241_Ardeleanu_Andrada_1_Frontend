@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 
 const API_URL = "http://localhost:49155";
 
@@ -13,7 +12,8 @@ const login = (username, password) => {
     .then((response) => {
       console.log("resp:" + response)
       if (response.data.username) {
-        localStorage.setItem("user", JSON.stringify(response.data));        
+        localStorage.setItem("user", JSON.stringify(response.data)); 
+        debugger       
       }
 
       return response.data;
@@ -26,7 +26,9 @@ const logout = () => {
 };
 
 const getCurrentUser = () => {
+  debugger
   return JSON.parse(localStorage.getItem("user"));
+
 };
 
 const AuthService = {
