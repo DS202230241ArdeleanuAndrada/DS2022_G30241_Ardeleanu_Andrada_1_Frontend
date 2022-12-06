@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:49155";
+const API_URL = "https://localhost:44347";
 
 const getAllDevices = () => {
   return axios
@@ -77,13 +77,23 @@ const deleteDevice = (id) => {
     });
 };
 
+const getDeviceMeasurements = (deviceId) => {
+  return axios
+    .get(API_URL + `/UserDevice/getMeasurements?deviceId=${deviceId}`, {})
+    .then((response) => {
+      console.log("resp:" + response);
+      return response.data;
+    });
+};
+
 const DeviceService = {
   getAllDevices,
   assignDevice,
   unassignDevice,
   createDevice,
   updateDevice,
-  deleteDevice,  
+  deleteDevice, 
+  getDeviceMeasurements, 
 }
 
 export default DeviceService;

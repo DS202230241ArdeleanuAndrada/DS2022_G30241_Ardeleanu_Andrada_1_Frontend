@@ -5,8 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import AuthService from "./services/authService";
 import { AdminPage } from './features/admin/AdminPage';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, notification } from 'antd';
 import { BasicUserPage } from './features/user/BasicUserPage';
+import { HubConnection, HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
+
 
 const { Header, Content } = Layout;
 
@@ -14,6 +16,30 @@ const App = () => {
   const [showUserBoard, setShowUserBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [connection, setConnection] = useState();
+
+  const subscribeForNotifications = (user) => {
+    const connection = new HubConnectionBuilder()
+      .withUrl("https://localhost:44347/hubs")
+      .withAutomaticReconnect()
+      .build();
+
+    connection
+      .start()
+      .then(() => {
+        connection.on("ReceiveMessage", (message) => {
+          notification.open({
+            message: "Warning",
+            description: message,
+          });
+        });
+
+        connection.invoke("JoinGroup", ({user: user.username}));
+      })
+      .catch((error) => console.log(error));
+
+    setConnection(connection);
+  }
 
 
   useEffect(() => {
@@ -23,11 +49,13 @@ const App = () => {
       setCurrentUser(user);
       setShowUserBoard(user.role !== "admin");
       setShowAdminBoard(user.role === "admin");
+      subscribeForNotifications(user);
     }
   }, []);
 
   const logOut = () => {
     AuthService.logout();
+    connection.stop();
     setShowUserBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);

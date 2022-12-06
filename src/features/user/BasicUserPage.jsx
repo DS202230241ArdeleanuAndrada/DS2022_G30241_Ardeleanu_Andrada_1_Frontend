@@ -2,16 +2,28 @@ import { Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import AuthService from "../../services/authService";
 import UserService from '../../services/userService';
+import { EyeOutlined } from '@ant-design/icons';
+import { DeviceDataModal } from './DeviceDataModal';
 
 const BasicUserPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [deviceData, setDeviceData] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [openedDevice, setOpenedDevice] = useState();
     const user = AuthService.getCurrentUser();
 
     useEffect(() => {
         getDevicesData();
     }, []);
+
+    const handleOpenModal = () => {
+        setModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    }
 
     const getDevicesData = async () => {
         setLoading(true);
@@ -47,6 +59,24 @@ const BasicUserPage = () => {
             dataIndex: 'MaxConsumption',
             key: 'maxConsumption',
         },
+        {
+            title: 'Action',
+            dataIndex: 'Action',
+            key: 'action',
+            render: (_, record) => {
+              console.log("record: ", record)
+              return (
+                <>
+                  <Button type="secondary" shape="round" icon={<EyeOutlined />} size='small'
+                    onClick={() => {
+                        handleOpenModal();
+                        setOpenedDevice(record);
+                    }}>
+                  </Button>
+                </>
+              )
+            }
+          },
     ]
 
     return (
@@ -57,6 +87,9 @@ const BasicUserPage = () => {
                 dataSource={deviceData}
                 loading={loading}
             />
+            {modalOpen && 
+                <DeviceDataModal modalOpen={modalOpen} handleCloseModal={handleCloseModal} openedDevice={openedDevice}/>
+            }
         </>
     );
 }
