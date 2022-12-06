@@ -60,7 +60,6 @@ const getUserDevices = (UserId) => {
     })
     .then((response) => {
       console.log("resp:" + response)
-      debugger
       return response.data;
     });
 };

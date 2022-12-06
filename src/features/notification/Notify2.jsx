@@ -21,7 +21,6 @@ export const Notify2 = () => {
         .start()
         .then(() => {
           connection.on("ReceiveMessage", ({message}) => {
-            debugger;
             notification.open({
               message: message,
               description: message,
@@ -33,7 +32,6 @@ export const Notify2 = () => {
   }, [connection]);
 
   const sendMessage = async () => {
-    debugger
     if (connection) await connection.send("SendMessage", inputText);
     setInputText("");
   };

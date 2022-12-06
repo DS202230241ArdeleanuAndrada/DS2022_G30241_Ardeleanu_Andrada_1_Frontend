@@ -1,4 +1,4 @@
-import { Table, Button } from 'antd';
+import { Table, Button, Tooltip } from 'antd';
 import React, { useState, useEffect } from 'react';
 import AuthService from "../../services/authService";
 import UserService from '../../services/userService';
@@ -67,12 +67,14 @@ const BasicUserPage = () => {
               console.log("record: ", record)
               return (
                 <>
+                 <Tooltip title="View device's measurements">
                   <Button type="secondary" shape="round" icon={<EyeOutlined />} size='small'
                     onClick={() => {
                         handleOpenModal();
                         setOpenedDevice(record);
                     }}>
-                  </Button>
+                          </Button>
+                  </Tooltip>
                 </>
               )
             }

@@ -11,7 +11,6 @@ const getAllDevices = () => {
 };
 
 const assignDevice = (userId, deviceId) => {
-  debugger
   return axios
     .post(API_URL + "/UserDevice/assignDevice", {
       userId,
@@ -24,7 +23,6 @@ const assignDevice = (userId, deviceId) => {
 };
 
 const unassignDevice = (userId, deviceId) => {
-  debugger
   return axios
     .post(API_URL + "/UserDevice/unassignDevice", {
       userId,

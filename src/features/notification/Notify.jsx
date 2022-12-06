@@ -23,7 +23,6 @@ export const Notify = (user) => {
         .build();
 
         connectionBuilder.on("ReceiveMessage", (message) => {
-            debugger
                       notification.open({
                         message: "New Notification",
                         description: message,
@@ -37,7 +36,6 @@ export const Notify = (user) => {
 
         try {
         connectionBuilder.start().then(() => {
-            debugger
             connectionBuilder.invoke("JoinRoom", {username: "test"})
         });
         } catch(e) {

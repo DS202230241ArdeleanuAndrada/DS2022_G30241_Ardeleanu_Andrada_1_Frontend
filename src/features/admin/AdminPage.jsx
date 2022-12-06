@@ -15,7 +15,6 @@ const AdminPage = () => {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-    debugger
     if (user) {
       setIsAdmin(user.role === "admin");
     }
