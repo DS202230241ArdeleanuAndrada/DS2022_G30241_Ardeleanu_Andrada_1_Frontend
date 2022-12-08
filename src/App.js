@@ -20,7 +20,7 @@ const App = () => {
 
   const subscribeForNotifications = (user) => {
     const connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:44347/hubs")
+      .withUrl("http://localhost:49155/hubs")
       .withAutomaticReconnect()
       .build();
 
